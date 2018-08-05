@@ -1,7 +1,5 @@
 <template>
-  <a href="#" class="btn">
-	<i class="fa fa-home"></i>
-</a>
+    <a id="fab" href="#"><v-icon>phone</v-icon></a>
 </template>
  
 <script lang="ts">
@@ -46,46 +44,38 @@ a {
   color: #35495E;
 }
 
-.btn{/*周りの凹み*/
+#fab {/*円の部分*/
+    display: block;
     position: absolute;
     left: 0px;
     right: 0px;
     top: 0px;
     bottom: 0px;
     margin: auto;
-    display: inline-block;
-    text-decoration: none;
-    color: rgba(3, 169, 244, 0.54);
-    width: 220px;
-    height: 220px;
-    border-radius: 50%;
-    text-align: center;
-    background: #f7f7f7;
-    box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.08);
+    width: 200px;/*幅*/
+    height: 200px;/*高さ*/
+    background: #03a9f4;/*背景色*/
+    text-align: center;/*中央寄せ*/
+    border-radius: 50%;/*角丸く*/
+    transition: .3s;/*滑らかな動きに*/
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,.12), 0 2px 2px 0 rgba(0,0,0,.24);/*影*/
 }
-.btn .fa {/*ボタン自体*/
+
+#fab:hover {/*ホバー時*/
+  box-shadow: 0 4px 5px 0 rgba(0,0,0,.14), 0 1px 10px 0 rgba(0,0,0,.12), 0 2px 4px -1px rgba(0,0,0,.2);
+}
+
+#fab i {/*中央のアイコン*/
+  position: relative;
+  color: white;
+  line-height: 200px;/*＝幅と高さ*/
+  font-size: 100px;/*サイズ*/
+  display: block;
     position: absolute;
-    content: '';
-    width: 200px;
-    height: 200px;
-    line-height: 200px;
-    vertical-align: middle; 
-    left: 10px;
-    top: 9px;
-    border-radius: 50%;
-    font-size: 6em;
-    background-image: -webkit-linear-gradient(#e8e8e8 0%, #d6d6d6 100%);
-    background-image: linear-gradient(#e8e8e8 0%, #d6d6d6 100%);
-    text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.66);
-    box-shadow: inset 0 2px 0 rgba(255,255,255,0.5), 0 2px 2px rgba(0, 0, 0, 0.19);
-    border-bottom: solid 2px #b5b5b5;
-  }
-  
-.btn .fa:active{
-    background-image: -webkit-linear-gradient(#efefef 0%, #d6d6d6 100%);
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.5), 0 2px 2px rgba(0, 0, 0, 0.19);
-    border-bottom: solid 2px #d8d8d8;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+    margin: auto;
 }
-
-
 </style>

@@ -1,6 +1,6 @@
 <template>
    <router-link to="/qrscan">
-    <a id="fab" href="#"><i class="fa fa-share"></i></a>
+    <a id="fab" href="#"><v-icon>send</v-icon></a>
   </router-link>
 </template>
 
