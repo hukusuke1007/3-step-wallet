@@ -1,5 +1,5 @@
 <template>
-   <router-link to="/completed">
+   <router-link to="/qrscan">
     <a id="fab" href="#"><i class="fa fa-share"></i></a>
   </router-link>
 </template>
@@ -74,10 +74,16 @@ a {
 }
 
 #fab i {/*中央のアイコン*/
+  position: relative;
   color: white;
   line-height: 200px;/*＝幅と高さ*/
-  vertical-align: middle;
-  font-size: 50px;/*サイズ*/
-  margin: center;
+  font-size: 100px;/*サイズ*/
+  display: block;
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+    margin: auto;
 }
 </style>

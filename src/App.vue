@@ -11,7 +11,7 @@
        <v-toolbar-title class="white--text">利用者向けウォレット</v-toolbar-title>
        <v-spacer></v-spacer>
        <v-menu bottom offset-y>
-         <v-btn slot="activator" icon dark>
+         <v-btn slot="activator" icon dark @click="tapset()">
            <v-icon>settings</v-icon>
          </v-btn>
          <Infomation></Infomation>
@@ -53,6 +53,13 @@ import Wallet from './components/Wallet.vue'
 export default class App extends Vue {
   private title = '利用者向けウォレット'
   mounted () {}
+//ボタン押したらページ移行のjs
+  tapset(){
+    this.$router.push({name: "Import"})
+  }
+  goTop(){
+    this.$router.push({name: "Send"})
+  }
 }
 </script>
 
