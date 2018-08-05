@@ -22,11 +22,7 @@ import Component from "vue-class-component";
 export default class Send extends Vue {
   private title = "Send class";
   mounted() {
-    console.log("mounted Send");
-  }
-  tapTest(){
-    console.log("tap")
-    this.$router.push({name: "Completed"})
+    console.log('mounted Send');
   }
 }
 </script>
