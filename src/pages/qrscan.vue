@@ -1,9 +1,5 @@
 <template lang="html">
- <v-flex>
-  <v-card>
-   <qrcode-reader @decode="onDecode" :paused="paused"></qrcode-reader>
-  </v-card>
- </v-flex>
+　<qrcode-reader @decode="onDecode" :paused="paused"></qrcode-reader>
 </template>
  
 <script lang="ts">
