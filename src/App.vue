@@ -1,11 +1,36 @@
 <template>
   <v-app>
-    <header>
-      <span>{{ title }} </span>
-    </header>
-    <main>
-      <Wallet/>
-    </main>
+    <!-- 上のツールバー -->
+     <v-toolbar
+      dark
+      color="blue accent-1"
+      clipped-left
+      fixed
+      app
+     >
+       <v-toolbar-title class="white--text">利用者向けウォレット</v-toolbar-title>
+       <v-spacer></v-spacer>
+       <v-menu bottom offset-y>
+         <v-btn slot="activator" icon dark>
+           <v-icon>settings</v-icon>
+         </v-btn>
+         <Infomation></Infomation>
+       </v-menu>
+       <v-toolbar-side-icon @click="goTop"><v-icon>home</v-icon></v-toolbar-side-icon>
+     </v-toolbar>
+     <v-content>
+
+      <!-- 真ん中のView -->
+      <!-- <v-container fluid fill-height> -->
+      <v-container fluid>
+        <v-fade-transition mode="out-in">
+          <router-view></router-view>
+        </v-fade-transition>
+      </v-container>
+      <!-- </v-container> -->
+     </v-content>
+
+
   </v-app>
 </template>
 
@@ -26,12 +51,22 @@ import Wallet from './components/Wallet.vue'
 
 // クラス
 export default class App extends Vue {
-  private title = 'My NEM wallet'
+  private title = '利用者向けウォレット'
   mounted () {}
 }
 </script>
 
 <style>
+#app {
+  font-family: 'Verdana', 'ヒラギノ角ゴ', 'Avenir', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  background-color: #fffaf0;
+  margin-top: 0px;
+}
+
 body {
   margin: 0;
 }
@@ -65,5 +100,22 @@ header span {
   font-weight: 400;
   box-sizing: border-box;
   padding-top: 16px;
+  float: left;
+}
+
+i {
+  display: block;
+  position: relative;
+  font-size: 20px;
+  line-height: 1;
+  letter-spacing: .02em;
+  font-weight: 400;
+  box-sizing: border-box;
+  /* padding-top: 16px; */ 
+  float: right;
+}
+
+.settingBtn {
+  padding-top: 16px; 
 }
 </style>

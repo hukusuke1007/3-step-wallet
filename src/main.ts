@@ -10,15 +10,25 @@ import 'vue2-toast/lib/toast.css'
 import Toast from 'vue2-toast'
 import VueQriously from 'vue-qriously'
 import VueQrcodeReader from 'vue-qrcode-reader'
+// Font Awesome のメインファイルを import
+
+import '@fortawesome/fontawesome-free-webfonts/css/fontawesome.css'
+
+// 使用するカテゴリーのファイルを import
+
+import '@fortawesome/fontawesome-free-webfonts/css/fa-brands.css'
+import '@fortawesome/fontawesome-free-webfonts/css/fa-regular.css'
+import '@fortawesome/fontawesome-free-webfonts/css/fa-solid.css'
+
  
 Vue.use(Vuetify, {
   theme: {
     original: colors.purple.base,
     theme: '#FFDEEA',
     background: '#FFF6EA',
-    view: '#ffa07a',
+    view: '#00BFFF',
     select: '#FF7F78',
-    button: '#5FACEF'
+    button: '#87CEFA',
   },
   options: {
     themeVariations: ['original', 'secondary']
