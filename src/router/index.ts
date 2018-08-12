@@ -4,7 +4,7 @@ import Hello from '@/components/Hello.vue'
 import Send from '@/pages/send.vue'
 import Qrscan from '@/pages/qrscan.vue'
 import Completed from '@/pages/completed.vue'
-import Import from '@/pages/import.vue'
+import Setting from '@/pages/setting.vue'
 
 Vue.use(Router)
 
@@ -31,9 +31,9 @@ export default new Router({
       component: Completed
     },
     {
-      path: '/import',
-      name: 'Import',
-      component: Import
+      path: '/setting',
+      name: 'Setting',
+      component: Setting
     }
   ]
 })

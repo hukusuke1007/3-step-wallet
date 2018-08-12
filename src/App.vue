@@ -8,7 +8,7 @@
       fixed
       app
      >
-       <v-toolbar-title class="white--text">利用者向けウォレット</v-toolbar-title>
+       <v-toolbar-title class="white--text">3 Steps Wallet</v-toolbar-title>
        <v-spacer></v-spacer>
        <v-menu bottom offset-y>
          <v-btn slot="activator" icon dark @click="tapset()">

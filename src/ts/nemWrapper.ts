@@ -25,7 +25,7 @@ export default class nemWrapper {
         }
     }
 
-    // アカウント作成.
+    //アカウント作成
     async createAccount() {
         let walletName = "wallet"
         let password = "wallet"
@@ -35,10 +35,18 @@ export default class nemWrapper {
         nem.crypto.helpers.passwordToPrivatekey(common, account, account.algo)
         let result = {
             address: account.address,
-            privateKey: common.privateKey
+            privateKey: common.privateKey,
+            phoneNumber: "000000000000"
         }
         return result
     }
+
+    // 秘密鍵からウォレット作成.
+    async createWalletWithPrivateKey(){
+        let privateKey = "Private key to import";
+
+    }
+    
 
     // アカウント情報取得.
     async getAccount(address: string) {
@@ -150,4 +158,6 @@ export default class nemWrapper {
         }
         return array
     }
+
+    
 }

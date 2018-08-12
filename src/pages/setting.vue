@@ -34,9 +34,12 @@
          <v-form>
       <v-divider></v-divider>
       <v-text-field
-        label="import secret key"
-        value="秘密鍵を入力してください"
+        label="秘密鍵を入力してください"
+        placeholder=""
         single-line
+        v-model="privateKey"
+        :rules="privateKeyRules"
+        :counter="64"
         full-width
         hide-details
       ></v-text-field>
@@ -58,8 +61,11 @@
       <v-divider></v-divider>
       <v-text-field
         label="Register phone number"
-        value="電話番号を入力してください"
+        placeholder=""
         single-line
+        v-model="phoneNumber"
+        :rules="phoneNumberRules"
+        :counter="11"
         full-width
         hide-details
       ></v-text-field>
@@ -81,9 +87,10 @@
 <script lang="ts">
 import Vue from 'vue'
 import Component from 'vue-class-component'
- 
+import settingModel from '../ts/settingModel'
+
 @Component({
-  name: 'import',
+  name: 'setting',
   // propsは他のvueから値渡しされる時に使用する.
   props: {
     message: {
@@ -92,10 +99,20 @@ import Component from 'vue-class-component'
     }
   }
 })
-export default class Import extends Vue {
-  private title = 'Import class'
+export default class Setting extends Vue {
+  private title = 'setting class'
+  privateKey: string = ''
+  phoneNumber: string = ''
   mounted () {
     console.log('mounted Import')
+  }
+  goImport () {
+    console.log(this.privateKey)
+    console.log(this.phoneNumber)
+    let model = new settingModel()
+    model.privateKey = this.privateKey
+    model.phoneNumber = this.phoneNumber
+    model.save()
   }
 }
 </script>
