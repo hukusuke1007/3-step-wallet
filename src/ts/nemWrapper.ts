@@ -1,4 +1,4 @@
-import nem from 'nem-sdk'
+/*import nem from 'nem-sdk'
 import encoding from 'encoding-japanese'
 
 export default class nemWrapper {
@@ -160,4 +160,4 @@ export default class nemWrapper {
     }
 
     
-}
+}*/

@@ -1,4 +1,4 @@
-import localForage from 'localforage'
+/*import localForage from 'localforage'
 import nemWrapper from './nemWrapper'
 
 export default class walletModel {
@@ -79,4 +79,4 @@ export default class walletModel {
             publicKey: this.publicKey
         }
     }
-}
+}*/
