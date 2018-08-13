@@ -6,6 +6,7 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 import { QrcodeReader } from 'vue-qrcode-reader'
+import SettingModel from '../ts/settingModel'
 
 Vue.component('my-component', {
   components: { QrcodeReader },
@@ -13,13 +14,23 @@ Vue.component('my-component', {
 
 @Component({
   name: 'qrscan',
-  // propsは他のvueから値渡しされる時に使用する.
-  props: {
-    message: {
-      type: String,
-      default: 'default'
+  data: () => ({
+    nem: new SettingModel(),
+    qrJson: '',
+    rules: {
+      senderAddrLimit: (value:string) => (value && (value.length === 46 || value.length === 40)) || '送金先アドレス(-除く)は40文字です。',
+      senderAddrInput: (value:string) => {
+        const pattern = /^[a-zA-Z0-9-]+$/
+        return pattern.test(value) || '送金先の入力が不正です'
+      },
+      amountLimit: (value:number) => (value >= 0) || '数量を入力してください',
+      amountInput: (value:string) => {
+        const pattern = /^[0-9.]+$/ //※ブログ上ではちゃんと表示されないため、実装の際はこのコメントアウトを外してください
+        return (pattern.test(value) && !isNaN(Number(value))) || '数量の入力が不正です'
+      },
+      messageRules: (value:string) => (value.length <= 1024) || 'メッセージの最大文字数が超えています。'
     }
-  },
+  }),
   methods: {
     async onInit (promise) {
       // show loading indicator
@@ -47,15 +58,39 @@ Vue.component('my-component', {
       }
     },
     onDecode(content){
-      this.$router.push({name: "Completed"})
+        console.log(content)
+        let model = new SettingModel
+        if (content !== '') {
+          let qrJson = JSON.parse(content)
+          console.log(qrJson)
+          console.log(qrJson.data, qrJson.data.addr, qrJson.data.amount)
+          let result = model.sendNem(
+            qrJson.data.addr, 
+            "62402038cf2a21fb8fbeaa6dffc731735a0d1d25ad4ab6fd46713b471423b6e3", 
+            qrJson.data.amount, 
+            qrJson.data.message)
+          console.log(result) 
+          this.$router.push({name: "Completed"})
+          /*if (!json) {
+            console.log('qr_reader error')
+          } else {
+            this.$emit('qr-reader-event-scan-success', json)
+            // this.paused = true
+          }
+        } else {
+          console.log('QR読み込みエラー')*/
+        }
+      }
     }
-  },
 })
+
 export default class Qrscan extends Vue {
-  private title = 'Qrscan class'
+  isLoding:boolean = false
+
   mounted () {
     console.log('mounted Qrscan')
   }
+
   
 }
 </script>

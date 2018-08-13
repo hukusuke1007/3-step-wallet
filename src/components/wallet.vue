@@ -12,8 +12,7 @@
           <v-card-text>{{ wallet.balance }} xem</v-card-text>
           <v-card-title><b>送金先アドレス</b></v-card-title>
           <v-card-text>{{ wallet.address }}</v-card-text>
-          <v-card flat><qriously v-model="qrJson" :size="qrSize" ></qriously></v-card>
-        </v-card>
+          </v-card>
         <v-card flat>
           <div v-for="(item, index) in validation" :key="index" class="errorLabel">
             <div v-if="item!==true">{{ item }}</div>
@@ -72,12 +71,7 @@ import walletModel from '../ts/walletModel'
       },
       messageRules: (value:string) => (value.length <= 1024) || 'メッセージの最大文字数が超えています。'
     }
-  }),
-  watch: {
-    'wallet.address' (newVal, oldVal) {
-      this.$data.qrJson = this.$data.nem.getQRcodeJson('2', 2, '', newVal, 0, '')
-    }
-  }
+  })
 })
 
 export default class Wallet extends Vue {

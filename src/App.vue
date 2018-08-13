@@ -55,7 +55,7 @@ export default class App extends Vue {
   mounted () {}
 //ボタン押したらページ移行のjs
   tapset(){
-    this.$router.push({name: "Import"})
+    this.$router.push({name: "Setting"})
   }
   goTop(){
     this.$router.push({name: "Send"})

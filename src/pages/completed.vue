@@ -1,5 +1,5 @@
 <template>
-    <a id="fab" href="#"><v-icon>phone</v-icon></a>
+    <a id="fab" href="#"><v-icon @click="goCalling">phone</v-icon></a>
 </template>
  
 <script lang="ts">
@@ -21,7 +21,9 @@ export default class Completed extends Vue {
   mounted () {
     console.log('mounted Completed')
   }
+  
 }
+
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

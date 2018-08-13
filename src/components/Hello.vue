@@ -8,6 +8,8 @@
 <script lang="ts">
 import Vue from 'vue'
 import Component from 'vue-class-component'
+import SettingModel from '../ts/settingModel'
+import settingModel from '../ts/settingModel';
  
 @Component({
   name: 'hello',
@@ -21,6 +23,7 @@ import Component from 'vue-class-component'
 })
 export default class Hello extends Vue {
   private title = 'Hello class'
+
   mounted () {
     console.log('mounted Hello')
   }

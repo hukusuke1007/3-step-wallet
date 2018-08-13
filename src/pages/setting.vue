@@ -24,6 +24,7 @@
         grid-list-lg
         >
   <v-layout row wrap colum>
+         {{ hogehoge }}
     <v-flex xs12>
       <v-card>
       <v-toolbar card dark tabs color="view">
@@ -88,6 +89,7 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 import settingModel from '../ts/settingModel'
+import walletModel from '../ts/walletModel'
 
 @Component({
   name: 'setting',
@@ -103,16 +105,20 @@ export default class Setting extends Vue {
   private title = 'setting class'
   privateKey: string = ''
   phoneNumber: string = ''
+
+  hogehoge: string = 'aaaa'
   mounted () {
     console.log('mounted Import')
   }
-  goImport () {
+  async goImport () {
     console.log(this.privateKey)
     console.log(this.phoneNumber)
     let model = new settingModel()
     model.privateKey = this.privateKey
     model.phoneNumber = this.phoneNumber
     model.save()
+    let wallet = await model.createWalletWithPrivateKey(this.privateKey)
+    this.hogehoge = wallet.accounts[0]
   }
 }
 </script>

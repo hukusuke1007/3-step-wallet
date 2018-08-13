@@ -1,4 +1,4 @@
-/*import nem from 'nem-sdk'
+import nem from 'nem-sdk'
 import encoding from 'encoding-japanese'
 
 export default class nemWrapper {
@@ -40,14 +40,7 @@ export default class nemWrapper {
         }
         return result
     }
-
-    // 秘密鍵からウォレット作成.
-    async createWalletWithPrivateKey(){
-        let privateKey = "Private key to import";
-
-    }
     
-
     // アカウント情報取得.
     async getAccount(address: string) {
         let result = await nem.com.requests.account.data(this.endpoint, address)
@@ -160,4 +153,4 @@ export default class nemWrapper {
     }
 
     
-}*/
+}

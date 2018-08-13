@@ -30,45 +30,31 @@ export default class settingModel {
             return false
         }
     }
+    // 秘密鍵からウォレット作成.
+    createWalletWithPrivateKey(privateKey: string) {
+        // Set a wallet name
+        var walletName = "QuantumMechanicsImported"
 
-    // ローカルストレージへ保存.
-    async save() {
-        let key = '3-step-wallet'
-        let result:any = await localForage.setItem(key, this.toJSON())
+        // Set a password
+        var password = "Something"
+
+        // Create a private key wallet
+        var wallet = nem.model.wallet.importPrivateKey(walletName,
+            password,
+            privateKey,
+            nem.model.network.data.mainnet.id);
+        console.log(wallet)
+        return wallet
+    }
+     
+    // 送金（NEM）
+    async sendNem(address:string, privateKey:string, amount:number, message:string) {
+        let common = nem.model.objects.create('common')('', privateKey)
+        let transferTransaction = nem.model.objects.create('transferTransaction')(address, amount, message)
+        let transactionEntity = nem.model.transactions.prepare('transferTransaction')(common, transferTransaction, this.net)
+        let result = await nem.model.transactions.send(common, transactionEntity, this.endpoint)
         return result
     }
-
-    // ローカルストレージから取得.
-    async load() {
-        let key = '3-steps-wallet'
-        let result:any = await localForage.getItem(key)
-        if (result !== null) {
-            this.privateKey = result.privateKey
-            this.phoneNumber = result.phoneNumber
-        }
-        return result
-    }
-
-    // ローカルストレージから削除.
-    async remove() {
-        let key = '3-steps-wallet'
-        let result:any = await localForage.removeItem(key)
-        return result
-    }
-     // アカウント情報取得.
-     async getAccount(address: string) {
-        let result = await nem.com.requests.account.data(this.endpoint, address)
-        return result
-    }
-
-   // 送金（NEM）
-   async sendNem(address:string, privateKey:string, amount:number, message:string) {
-    let common = nem.model.objects.create('common')('', privateKey)
-    let transferTransaction = nem.model.objects.create('transferTransaction')(address, amount, message)
-    let transactionEntity = nem.model.transactions.prepare('transferTransaction')(common, transferTransaction, this.net)
-    let result = await nem.model.transactions.send(common, transactionEntity, this.endpoint)
-    return result
-}
     // 送金（Mosaic）
     async sendMosaics(address:string, privateKey:string, mosaics:Array<any>, message:string) {
         let common = nem.model.objects.create('common')('', privateKey)
@@ -132,10 +118,67 @@ export default class settingModel {
             })
         })
     }
-   
-    // 秘密鍵からウォレット作成.
-    async createWalletWithPrivateKey(privateKey:string) {
-        
+
+     // ローカルストレージへ保存.
+    async save() {
+        let key = '3-step-wallet'
+        let result:any = await localForage.setItem(key, this.toJSON())
+        return result
+    }
+
+    // ローカルストレージから取得.
+    async load() {
+        let key = '3-steps-wallet'
+        let result:any = await localForage.getItem(key)
+        if (result !== null) {
+            this.privateKey = result.privateKey
+            this.phoneNumber = result.phoneNumber
+        }
+        return result
+    }
+
+    // ローカルストレージから削除.
+    async remove() {
+        let key = '3-steps-wallet'
+        let result:any = await localForage.removeItem(key)
+        return result
+    }
+    // アカウント情報取得.
+    async getAccount(address: string) {
+        let result = await nem.com.requests.account.data(this.endpoint, address)
+        return result
+    }
+
+    // QRコードjson取得.
+    async getQRcodeJson(v:string, type:number, name:string, addr:string, amount:number, msg:string) {
+        // v:2, type:1 アカウント, type:2 請求書
+        let amountVal = amount * Math.pow(10, 6)
+        let json = {
+          type: type,
+          data: {
+            name: name,
+            addr: addr,
+            amount: amountVal,
+            msg: msg
+          },
+          v: v
+        }
+        let jsonString = JSON.stringify(json)
+        let result = encoding.codeToString(encoding.convert(this.getStr2Array(jsonString), 'UTF8'))
+        return result
+    }
+
+    // NEMの可分性取得
+    getNemDivisibility(): number {
+        return Math.pow(10, 6)
+    }
+
+    private getStr2Array(str:string) {
+        let array = []
+        for (let i = 0; i < str.length; i++) {
+          array.push(str.charCodeAt(i))
+        }
+        return array
     }
 
     toJSON() {

@@ -5,18 +5,24 @@ import Send from '@/pages/send.vue'
 import Qrscan from '@/pages/qrscan.vue'
 import Completed from '@/pages/completed.vue'
 import Setting from '@/pages/setting.vue'
+import Wallet from '@/components/wallet.vue'
 
 Vue.use(Router)
 
 export default new Router({
   routes: [
     {
-      path: '/',
+      path: '/hello',
       name: 'Hello',
       component: Hello
     },
     {
-      path: '/send',
+      path: '/wallet',
+      name: 'Wallet',
+      component: Wallet
+    },
+    {
+      path: '/',
       name: 'Send',
       component: Send
     },
