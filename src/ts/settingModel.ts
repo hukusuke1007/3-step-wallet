@@ -33,13 +33,14 @@ export default class settingModel {
     // 秘密鍵からウォレット作成.
     createWalletWithPrivateKey(privateKey: string) {
         // Set a wallet name
-        var walletName = "QuantumMechanicsImported"
+        let walletName = "QuantumMechanicsImported"
 
         // Set a password
-        var password = "Something"
+        let password = "Something"
 
         // Create a private key wallet
-        var wallet = nem.model.wallet.importPrivateKey(walletName,
+        let wallet = nem.model.wallet.importPrivateKey(
+            walletName,
             password,
             privateKey,
             nem.model.network.data.mainnet.id);
@@ -128,7 +129,7 @@ export default class settingModel {
 
     // ローカルストレージから取得.
     async load() {
-        let key = '3-steps-wallet'
+        let key = '3-step-wallet'
         let result:any = await localForage.getItem(key)
         if (result !== null) {
             this.privateKey = result.privateKey
@@ -139,7 +140,7 @@ export default class settingModel {
 
     // ローカルストレージから削除.
     async remove() {
-        let key = '3-steps-wallet'
+        let key = '3-step-wallet'
         let result:any = await localForage.removeItem(key)
         return result
     }

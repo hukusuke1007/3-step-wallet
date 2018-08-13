@@ -1,5 +1,5 @@
 <template>
-    <a id="fab" href="#"><v-icon @click="goCalling">phone</v-icon></a>
+    <a id="fab" href="tel:08061341310"><v-icon @click="goCalling">phone</v-icon></a>
 </template>
  
 <script lang="ts">

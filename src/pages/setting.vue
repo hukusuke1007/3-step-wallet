@@ -118,7 +118,7 @@ export default class Setting extends Vue {
     model.phoneNumber = this.phoneNumber
     model.save()
     let wallet = await model.createWalletWithPrivateKey(this.privateKey)
-    this.hogehoge = wallet.accounts[0]
+    //this.hogehoge = wallet.accounts[0]
   }
 }
 </script>

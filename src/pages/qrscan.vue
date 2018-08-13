@@ -57,17 +57,19 @@ Vue.component('my-component', {
         // hide loading indicator
       }
     },
-    onDecode(content){
+    async onDecode(content){
         console.log(content)
         let model = new SettingModel
+        let getPrivateKey = await model.load()
+        console.log(getPrivateKey.privateKey)
         if (content !== '') {
           let qrJson = JSON.parse(content)
           console.log(qrJson)
           console.log(qrJson.data, qrJson.data.addr, qrJson.data.amount)
           let result = model.sendNem(
             qrJson.data.addr, 
-            "62402038cf2a21fb8fbeaa6dffc731735a0d1d25ad4ab6fd46713b471423b6e3", 
-            qrJson.data.amount, 
+            getPrivateKey.privateKey,
+            qrJson.data.amount/(Math.pow(10,6)), 
             qrJson.data.message)
           console.log(result) 
           this.$router.push({name: "Completed"})

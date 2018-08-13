@@ -2,6 +2,7 @@
   <div class="hello">
     <h1>{{ title }}</h1>
     <div v-html="message"> </div>
+    <v-btn @click="tap"></v-btn>
   </div>
 </template>
  
@@ -9,7 +10,6 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 import SettingModel from '../ts/settingModel'
-import settingModel from '../ts/settingModel';
  
 @Component({
   name: 'hello',
@@ -27,7 +27,14 @@ export default class Hello extends Vue {
   mounted () {
     console.log('mounted Hello')
   }
+  async tap(){
+    let test = new SettingModel
+    let result = await test.load()
+    console.log(result.privateKey)
+    // console.log(test.load());
+  }
 }
+
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
