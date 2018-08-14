@@ -12,7 +12,7 @@ Vue.use(Router)
 export default new Router({
   routes: [
     {
-      path: '/hello',
+      path: '/',
       name: 'Hello',
       component: Hello
     },
@@ -22,7 +22,7 @@ export default new Router({
       component: Wallet
     },
     {
-      path: '/',
+      path: '/send',
       name: 'Send',
       component: Send
     },

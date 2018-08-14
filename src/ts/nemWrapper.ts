@@ -1,6 +1,9 @@
 import nem from 'nem-sdk'
 import encoding from 'encoding-japanese'
 
+
+
+
 export default class nemWrapper {
     endpoint: string = ''
     host: string = ''
@@ -12,7 +15,7 @@ export default class nemWrapper {
         this.host = 'https://aqualife2.supernode.me'
         this.port = '7891'
         this.net = nem.model.network.data.mainnet.id
-        this.endpoint = nem.model.objects.create("endpoint")(this.host, this.port)    
+        this.endpoint = nem.model.objects.create("endpoint")(this.host, this.port)
     }
 
     // NISの状態確認.
@@ -25,7 +28,7 @@ export default class nemWrapper {
         }
     }
 
-    //アカウント作成
+    // アカウント作成.
     async createAccount() {
         let walletName = "wallet"
         let password = "wallet"
@@ -35,12 +38,11 @@ export default class nemWrapper {
         nem.crypto.helpers.passwordToPrivatekey(common, account, account.algo)
         let result = {
             address: account.address,
-            privateKey: common.privateKey,
-            phoneNumber: "000000000000"
+            privateKey: common.privateKey
         }
         return result
     }
-    
+
     // アカウント情報取得.
     async getAccount(address: string) {
         let result = await nem.com.requests.account.data(this.endpoint, address)
@@ -77,6 +79,11 @@ export default class nemWrapper {
         let transactionEntity = nem.model.transactions.prepare('mosaicTransferTransaction')(common, transferTransaction, mosaicDefinitionMetaDataPair, this.net)
         let result = await nem.model.transactions.send(common, transactionEntity, this.endpoint)
         return result
+    }
+
+    // モザイク取得
+    async getMosaics(address: string) {
+        // 工事中
     }
 
     // モザイク定義取得.
@@ -120,37 +127,18 @@ export default class nemWrapper {
         })
     }
 
-    // QRコードjson取得.
-    getQRcodeJson(v:string, type:number, name:string, addr:string, amount:number, msg:string) {
-        // v:2, type:1 アカウント, type:2 請求書
-        let amountVal = amount * Math.pow(10, 6)
-        let json = {
-          type: type,
-          data: {
-            name: name,
-            addr: addr,
-            amount: amountVal,
-            msg: msg
-          },
-          v: v
-        }
-        let jsonString = JSON.stringify(json)
-        let result = encoding.codeToString(encoding.convert(this.getStr2Array(jsonString), 'UTF8'))
-        return result
-    }
 
     // NEMの可分性取得
     getNemDivisibility(): number {
         return Math.pow(10, 6)
     }
 
-    private getStr2Array(str:string) {
-        let array = []
-        for (let i = 0; i < str.length; i++) {
-          array.push(str.charCodeAt(i))
-        }
-        return array
-    }
-
+    /* マルチシグアカウントから出金時の手数料
+      転送トランザクションの手数料: 送る XEM、モザイクなどに依存。
+      マルチシグトランザクションの手数料: 0.15 XEM。
+      マルチシグ署名トランザクション: 0.15 XEM
+      全部マルチシグアカウントから手数料が引かれるみたいです。
+      合計で、転送トランザクションなどの手数料 + 必要署名数 * 0.15 XEM の手数料
+    */
     
 }

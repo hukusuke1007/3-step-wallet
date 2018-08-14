@@ -12,11 +12,12 @@ Vue.component('my-component', {
   components: { QrcodeReader },
 })
 
-@Component({
+export default Vue.extend({
   name: 'qrscan',
   data: () => ({
     nem: new SettingModel(),
     qrJson: '',
+    isLoding: false,
     rules: {
       senderAddrLimit: (value:string) => (value && (value.length === 46 || value.length === 40)) || '送金先アドレス(-除く)は40文字です。',
       senderAddrInput: (value:string) => {
@@ -32,7 +33,7 @@ Vue.component('my-component', {
     }
   }),
   methods: {
-    async onInit (promise) {
+    async onInit (promise: any) {
       // show loading indicator
 
       try {
@@ -57,22 +58,19 @@ Vue.component('my-component', {
         // hide loading indicator
       }
     },
-    async onDecode(content){
+
+    async onDecode(content: any) {
         console.log(content)
-        let model = new SettingModel
+
+        /*let model = new SettingModel
         let getPrivateKey = await model.load()
-        console.log(getPrivateKey.privateKey)
+        console.log(getPrivateKey.privateKey)*/
+
         if (content !== '') {
           let qrJson = JSON.parse(content)
           console.log(qrJson)
           console.log(qrJson.data, qrJson.data.addr, qrJson.data.amount)
-          let result = model.sendNem(
-            qrJson.data.addr, 
-            getPrivateKey.privateKey,
-            qrJson.data.amount/(Math.pow(10,6)), 
-            qrJson.data.message)
-          console.log(result) 
-          this.$router.push({name: "Completed"})
+          this.sendMultisig(qrJson)
           /*if (!json) {
             console.log('qr_reader error')
           } else {
@@ -82,19 +80,49 @@ Vue.component('my-component', {
         } else {
           console.log('QR読み込みエラー')*/
         }
-      }
+      },
+     async sendMultisig(qrContent: any) {
+      let model = new SettingModel
+      let getInfo = await model.load()
+      console.log(getInfo.privateKey)
+      console.log(qrContent.data.addr)
+      let consigPrivateKey: string = getInfo.privateKey
+      let multisigPublicKey: string = getInfo.publicKey
+      let toAddr: string = qrContent.data.addr
+      let amount: number = qrContent.data.amount
+      let message: string = qrContent.data.message
+      model.createXemTransaction(consigPrivateKey, toAddr, amount, message, multisigPublicKey)
+        .then((result: any) => {
+          console.log("sendMultisig", result)
+          this.$router.push({name: "Completed"})
+        }).catch((error: any) => {
+          console.error("sendMultisig", error)
+        })
+
+    
+    
     }
+  }  
 })
 
+/*
 export default class Qrscan extends Vue {
   isLoding:boolean = false
 
   mounted () {
     console.log('mounted Qrscan')
   }
-
+  async sendMultisig(qrContent: any) {
+    let model = new SettingModel
+    let getInfo = await model.load()
+    console.log(getInfo.privateKey)
+    let consigPrivateKey: string = getInfo.privateKey
+    let multisigPublicKey: string = getInfo.publicKey
+    this.$router.push({name: "Completed"})
+  }
   
 }
+*/
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

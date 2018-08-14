@@ -24,7 +24,6 @@
         grid-list-lg
         >
   <v-layout row wrap colum>
-         {{ hogehoge }}
     <v-flex xs12>
       <v-card>
       <v-toolbar card dark tabs color="view">
@@ -47,9 +46,27 @@
       <v-divider></v-divider>
     </v-form>
       </v-card>
+      <br>
       <v-card>
-        <v-card-text>秘密鍵の入力が終わりましたらボタンを押してください</v-card-text>
-        <v-btn color="select" class="buttonFont white--text" large @click="goImport">秘密鍵をインポート</v-btn>
+      <v-toolbar card dark tabs color="view">
+        <v-toolbar-title>マルチシグアカウントの公開鍵</v-toolbar-title>
+        </v-toolbar>
+      </v-card>
+       <v-card>
+         <v-form>
+      <v-divider></v-divider>
+      <v-text-field
+        label="Public key of multi-sig account"
+        placeholder=""
+        single-line
+        v-model="publicKey"
+        :rules="publicKeyRules"
+        :counter="64"
+        full-width
+        hide-details
+      ></v-text-field>
+      <v-divider></v-divider>
+    </v-form>
       </v-card>
       <br>
       <v-card>
@@ -73,9 +90,10 @@
       <v-divider></v-divider>
     </v-form>
       </v-card>
+      <br>
       <v-card>
-        <v-card-text>電話番号の登録ができましたら登録ボタンを押してください</v-card-text>
-        <v-btn color="select" class="buttonFont white--text" large @click="goImport">電話番号を登録する</v-btn>
+        <v-card-text>入力が終わりましたらボタンを押してください</v-card-text>
+        <v-btn color="select" class="buttonFont white--text" large @click="goImport">インポート</v-btn>
       </v-card>
     </v-flex>
    </v-layout>
@@ -105,17 +123,20 @@ export default class Setting extends Vue {
   private title = 'setting class'
   privateKey: string = ''
   phoneNumber: string = ''
+  publicKey: string = ''
 
-  hogehoge: string = 'aaaa'
+  
   mounted () {
     console.log('mounted Import')
   }
   async goImport () {
     console.log(this.privateKey)
     console.log(this.phoneNumber)
+    console.log(this.publicKey)
     let model = new settingModel()
     model.privateKey = this.privateKey
     model.phoneNumber = this.phoneNumber
+    model.publicKey = this.publicKey
     model.save()
     let wallet = await model.createWalletWithPrivateKey(this.privateKey)
     //this.hogehoge = wallet.accounts[0]

@@ -1,6 +1,33 @@
 import localForage from 'localforage'
 import nem from 'nem-sdk'
 import encoding from 'encoding-japanese'
+import {/* UnconfirmedTransactionListener, ConfirmedTransactionListener, */
+    Account, AccountHttp, MosaicHttp, NEMLibrary, NetworkTypes, Address, ServerConfig,
+    SimpleWallet, Password, EncryptedPrivateKey, TimeWindow, Message, PlainMessage, XEM,
+    TransactionHttp, TransferTransaction, AccountOwnedMosaicsService, MosaicId, Transaction,
+    PublicAccount, MultisigAggregateModificationTransaction, CosignatoryModification, CosignatoryModificationAction,
+    MultisigTransaction, TransactionTypes, MultisigSignatureTransaction, SignedTransaction} from 'nem-library'
+import { resolve } from 'dns';
+
+    NEMLibrary.bootstrap(NetworkTypes.MAIN_NET)
+    const nodes: Array<ServerConfig> = [
+      {protocol: 'https', domain: 'aqualife2.supernode.me', port: 7891},
+      {protocol: 'https', domain: 'aqualife3.supernode.me', port: 7891},
+      {protocol: 'https', domain: 'happy.supernode.me', port: 7891},
+      {protocol: 'https', domain: 'mnbhsgwbeta.supernode.me', port: 7891},
+      {protocol: 'https', domain: 'nsm.supernode.me', port: 7891},
+      {protocol: 'https', domain: 'kohkei.supernode.me', port: 7891},
+      {protocol: 'https', domain: 'mttsukuba.supernode.me', port: 7891},
+      {protocol: 'https', domain: 'strategic-trader-1.supernode.me', port: 7891},
+      {protocol: 'https', domain: 'strategic-trader-2.supernode.me', port: 7891},
+      {protocol: 'https', domain: 'shibuya.supernode.me', port: 7891},
+      {protocol: 'https', domain: 'qora01.supernode.me', port: 7891},
+      {protocol: 'https', domain: 'pegatennnag.supernode.me', port: 7891}
+    ]
+
+    const accountHttp: AccountHttp = new AccountHttp(nodes)
+    const transactionHttp: TransactionHttp = new TransactionHttp(nodes)
+    const mosaicHttp = new MosaicHttp(nodes)
 
 export default class settingModel {
     endpoint: string = ''
@@ -134,6 +161,7 @@ export default class settingModel {
         if (result !== null) {
             this.privateKey = result.privateKey
             this.phoneNumber = result.phoneNumber
+            this.publicKey = result.publicKey
         }
         return result
     }
@@ -189,5 +217,52 @@ export default class settingModel {
             publicKey: this.publicKey,
             phoneNumber: this.phoneNumber
         }
+    }
+
+    // マルチシグアカウントからNEMを送金.
+    createXemTransaction(consigPrivateKey: string, addr: string, amount: number, message: string, multisigPublicKey:string) {
+        return new Promise((resolve, reject) => {
+            let account = Account.createWithPrivateKey(consigPrivateKey)
+            let signedTransaction: SignedTransaction
+            if (multisigPublicKey) {
+                const multisigTransaction = this.createMulitisigTransaction(multisigPublicKey, addr, amount, message)
+                signedTransaction = account.signTransaction(multisigTransaction)
+            } else {
+                const transferTransaction: Transaction = TransferTransaction.create(
+                    TimeWindow.createWithDeadline(),
+                    new Address(addr),
+                    new XEM(amount),
+                    PlainMessage.create(message)
+                )
+                signedTransaction = account.signTransaction(transferTransaction)
+            }
+
+            transactionHttp.announceTransaction(signedTransaction).subscribe(
+                result => {
+                    console.log(result)
+                    return resolve(result)
+                },
+                error => {
+                    console.error(error)
+                    return reject(error)
+                }
+            )
+        })
+    }
+
+    // XEMのマルチシグトランザクション作成
+    createMultisigTransaction(multisigPublicKey: string, addr: string, amount: number, message:string) {
+        const transferTransaction: Transaction = TransferTransaction.create(
+            TimeWindow.createWithDeadline(),
+            new Address(addr),
+            new XEM(amount),
+            PlainMessage.create(message)
+        )
+        const multisigTransaction: MultisigTransaction = MultisigTransaction.create(
+            TimeWindow.createWithDeadline(),
+            transferTransaction,
+            PublicAccount.createWithPublicKey(multisigPublicKey)
+        )
+        return multisigTransaction
     }
 }
