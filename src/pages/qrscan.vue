@@ -69,7 +69,7 @@ export default Vue.extend({
         if (content !== '') {
           let qrJson = JSON.parse(content)
           console.log(qrJson)
-          console.log(qrJson.data, qrJson.data.addr, qrJson.data.amount)
+          console.log(qrJson.data.msg)
           this.sendMultisig(qrJson)
           /*if (!json) {
             console.log('qr_reader error')
@@ -85,12 +85,12 @@ export default Vue.extend({
       let model = new SettingModel
       let getInfo = await model.load()
       console.log(getInfo.privateKey)
-      console.log(qrContent.data.addr)
+      console.log(qrContent.data.msg)
       let consigPrivateKey: string = getInfo.privateKey
       let multisigPublicKey: string = getInfo.publicKey
       let toAddr: string = qrContent.data.addr
-      let amount: number = qrContent.data.amount
-      let message: string = qrContent.data.message
+      let amount: number = qrContent.data.amount/Math.pow(10, 6)
+      let message: string = qrContent.data.msg
       model.createXemTransaction(consigPrivateKey, toAddr, amount, message, multisigPublicKey)
         .then((result: any) => {
           console.log("sendMultisig", result)

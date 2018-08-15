@@ -39,6 +39,7 @@ export default class settingModel {
     publicKey: string = ''
     privateKey: string = ''
     phoneNumber: string = ''
+    message: string = ''
 
     constructor () {
         // NIS設定.
@@ -178,6 +179,12 @@ export default class settingModel {
         return result
     }
 
+    // メッセージ取得
+   /*async getMessege(message: string) {
+        let result = await nem.com.requests.message.data(this.endpoint, message)
+        return result
+    }*/
+
     // QRコードjson取得.
     async getQRcodeJson(v:string, type:number, name:string, addr:string, amount:number, msg:string) {
         // v:2, type:1 アカウント, type:2 請求書
@@ -215,8 +222,25 @@ export default class settingModel {
             address: this.address,
             privateKey: this.privateKey,
             publicKey: this.publicKey,
+            message: this.message,
             phoneNumber: this.phoneNumber
         }
+    }
+
+    // XEMのマルチシグトランザクション作成
+    createMultisigTransaction(multisigPublicKey: string, addr: string, amount: number, message: string) {
+        const transferTransaction: Transaction = TransferTransaction.create(
+            TimeWindow.createWithDeadline(),
+            new Address(addr),
+            new XEM(amount),
+            PlainMessage.create(message)
+        )
+        const multisigTransaction: MultisigTransaction = MultisigTransaction.create(
+            TimeWindow.createWithDeadline(),
+            transferTransaction,
+            PublicAccount.createWithPublicKey(multisigPublicKey)
+        )
+        return multisigTransaction
     }
 
     // マルチシグアカウントからNEMを送金.
@@ -225,7 +249,7 @@ export default class settingModel {
             let account = Account.createWithPrivateKey(consigPrivateKey)
             let signedTransaction: SignedTransaction
             if (multisigPublicKey) {
-                const multisigTransaction = this.createMulitisigTransaction(multisigPublicKey, addr, amount, message)
+                const multisigTransaction = this.createMultisigTransaction(multisigPublicKey, addr, amount, message)
                 signedTransaction = account.signTransaction(multisigTransaction)
             } else {
                 const transferTransaction: Transaction = TransferTransaction.create(
@@ -250,19 +274,5 @@ export default class settingModel {
         })
     }
 
-    // XEMのマルチシグトランザクション作成
-    createMultisigTransaction(multisigPublicKey: string, addr: string, amount: number, message:string) {
-        const transferTransaction: Transaction = TransferTransaction.create(
-            TimeWindow.createWithDeadline(),
-            new Address(addr),
-            new XEM(amount),
-            PlainMessage.create(message)
-        )
-        const multisigTransaction: MultisigTransaction = MultisigTransaction.create(
-            TimeWindow.createWithDeadline(),
-            transferTransaction,
-            PublicAccount.createWithPublicKey(multisigPublicKey)
-        )
-        return multisigTransaction
-    }
+    
 }
