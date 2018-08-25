@@ -13,18 +13,13 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Hello',
-      component: Hello
+      name: 'Send',
+      component: Send
     },
     {
       path: '/wallet',
       name: 'Wallet',
       component: Wallet
-    },
-    {
-      path: '/send',
-      name: 'Send',
-      component: Send
     },
     {
       path: '/qrscan',
