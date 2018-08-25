@@ -1,10 +1,14 @@
 <template>
-    <a id="fab" href="tel:"><v-icon @click="goCalling">phone</v-icon></a>
+    <a id="fab" :href="hrefPhone">
+      <v-icon>phone</v-icon>
+    </a>
+    <!-- <a id="fab" href="tel:javascript:goCalling()"><v-icon @click="goCalling">phone</v-icon></a> -->
 </template>
  
 <script lang="ts">
 import Vue from 'vue'
 import Component from 'vue-class-component'
+import SettingModel from '../ts/settingModel'
  
 @Component({
   name: 'completed',
@@ -17,10 +21,25 @@ import Component from 'vue-class-component'
   }
 })
 export default class Completed extends Vue {
+  
   private title = 'Completed class'
+  //電話番号定義
+  hrefPhone: string = ''
+
+
   mounted () {
     console.log('mounted Completed')
+    this.getPhoneNumber()
   }
+
+  async getPhoneNumber() {
+    let model = new SettingModel
+    let getInfo = await model.load()
+    console.log(getInfo.phoneNumber) 
+    this.hrefPhone = "tel:" + getInfo.phoneNumber
+  }
+
+
   
 }
 

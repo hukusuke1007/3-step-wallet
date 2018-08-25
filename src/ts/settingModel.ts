@@ -6,8 +6,8 @@ import {/* UnconfirmedTransactionListener, ConfirmedTransactionListener, */
     SimpleWallet, Password, EncryptedPrivateKey, TimeWindow, Message, PlainMessage, XEM,
     TransactionHttp, TransferTransaction, AccountOwnedMosaicsService, MosaicId, Transaction,
     PublicAccount, MultisigAggregateModificationTransaction, CosignatoryModification, CosignatoryModificationAction,
-    MultisigTransaction, TransactionTypes, MultisigSignatureTransaction, SignedTransaction} from 'nem-library'
-import { resolve } from 'dns';
+    MultisigTransaction, TransactionTypes, MultisigSignatureTransaction, SignedTransaction, MosaicService} from 'nem-library'
+
 
     NEMLibrary.bootstrap(NetworkTypes.MAIN_NET)
     const nodes: Array<ServerConfig> = [
@@ -273,6 +273,7 @@ export default class settingModel {
             )
         })
     }
-
+    
     
 }
+
