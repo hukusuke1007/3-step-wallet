@@ -3,6 +3,11 @@
     <h1>{{ title }}</h1>
     <div v-html="message"> </div>
     <v-btn @click="tap"></v-btn>
+              <v-text-field
+            box
+            label="利用される方の秘密鍵を入力してください"
+            :counter="64"
+            required></v-text-field>
   </div>
 </template>
  

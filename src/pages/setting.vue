@@ -1,106 +1,67 @@
 <template>
+<v-flex>
   <div
-    id="e3"
-    style="max-width: 400px; margin: auto;"
-    class="grey lighten-3"
-  >
-    <v-toolbar
+      id="e3"
+      style="max-width: 400px; margin: auto;"
+      class="grey lighten-3"
+    >
+   
+  </div>
+  <v-card flat>
+     <v-toolbar
       color="blue"
       dark
-    >
-    <!-- 多分ボタンいらねぇ　-->
-    <!--
-      <v-btn icon @click.native="back()" dark>
-        <v-icon>keyboard_arrow_left</v-icon>
-      </v-btn> -->
+    ><v-toolbar-title>設定画面</v-toolbar-title></v-toolbar>
+    <v-container
+          fluid
+          style="min-height: 0;"
+          grid-list-lg>
+        <v-flex>
+          <v-text-field
+            box
+            label="利用される方の秘密鍵を入力してください"
+            v-model="privateKey"
+            :counter="64"
+            required></v-text-field>
+        </v-flex>
+        <v-flex>
+          <v-text-field
+            box
+            label="マルチシグ金庫の公開鍵を入力してください"
+            v-model="publicKey"
+            :counter="64"
+            required></v-text-field>
+        </v-flex>
+        <v-flex>
+          <v-text-field
+            box
+            label="金銭管理する方の電話番号を入力してください"
+            v-model="phoneNumber"
+            :counter="11"
+            required></v-text-field>
+          <v-card-text>入力が終わりましたらボタンを押してください</v-card-text>
+          <v-btn color="select" class="white--text" large @click="goImport()">インポート</v-btn>
+        </v-flex>
 
-      <v-toolbar-title>設定画面</v-toolbar-title>
-      <v-spacer></v-spacer>
-    </v-toolbar>
- <v-card flat>
-  <v-container
-        fluid
-        style="min-height: 0;"
-        grid-list-lg
-        >
-  <v-layout row wrap colum>
-    <v-flex xs12>
-      <v-card>
-      <v-toolbar card dark tabs color="view">
-        <v-toolbar-title>ウォレットのインポート</v-toolbar-title>
-        </v-toolbar>
-      </v-card>
-      <v-card>
-         <v-form>
-      <v-divider></v-divider>
-      <v-text-field
-        label="秘密鍵を入力してください"
-        placeholder=""
-        single-line
-        v-model="privateKey"
-        :rules="privateKeyRules"
-        :counter="64"
-        full-width
-        hide-details
-      ></v-text-field>
-      <v-divider></v-divider>
-    </v-form>
-      </v-card>
-      <br>
-      <v-card>
-      <v-toolbar card dark tabs color="view">
-        <v-toolbar-title>マルチシグアカウントの公開鍵</v-toolbar-title>
-        </v-toolbar>
-      </v-card>
-       <v-card>
-         <v-form>
-      <v-divider></v-divider>
-      <v-text-field
-        label="Public key of multi-sig account"
-        placeholder=""
-        single-line
-        v-model="publicKey"
-        :rules="publicKeyRules"
-        :counter="64"
-        full-width
-        hide-details
-      ></v-text-field>
-      <v-divider></v-divider>
-    </v-form>
-      </v-card>
-      <br>
-      <v-card>
-      <v-toolbar card dark tabs color="view">
-        <v-toolbar-title>管理者の電話番号登録</v-toolbar-title>
-        </v-toolbar>
-      </v-card>
-       <v-card>
-         <v-form>
-      <v-divider></v-divider>
-      <v-text-field
-        label="Register phone number"
-        placeholder=""
-        single-line
-        v-model="phoneNumber"
-        :rules="phoneNumberRules"
-        :counter="11"
-        full-width
-        hide-details
-      ></v-text-field>
-      <v-divider></v-divider>
-    </v-form>
-      </v-card>
-      <br>
-      <v-card>
-        <v-card-text>入力が終わりましたらボタンを押してください</v-card-text>
-        <v-btn color="select" class="buttonFont white--text" large @click="goImport">インポート</v-btn>
-      </v-card>
-    </v-flex>
-   </v-layout>
-  </v-container>
- </v-card>
-  </div>
+    <!-- ダイアログ -->
+    <v-dialog v-model="isShowDialog" max-width="500px">
+     <v-card>
+        <div class="w-break">
+          <v-card-title><font color="blue">{{ dialogTitle }}</font></v-card-title>
+          <v-card-text v-html="dialogMsg"></v-card-text>
+        </div>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="green darken-1" flat="flat" @click.native="tapDialog()">OK</v-btn>
+        </v-card-actions>
+     </v-card>         
+    </v-dialog>
+
+    </v-container>
+  </v-card>
+  </v-flex>
 </template>
+
 
  
 <script lang="ts">
@@ -108,42 +69,99 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 import settingModel from '../ts/settingModel'
 import walletModel from '../ts/walletModel'
+import DialogConfirm from '../components/DialogConfirm.vue'
 
-@Component({
-  name: 'setting',
-  // propsは他のvueから値渡しされる時に使用する.
-  props: {
-    message: {
-      type: String,
-      default: 'default'
+export default Vue.extend({
+  data: () => ({
+    title: 'setting class',
+    privateKey: '',
+    phoneNumber: '',
+    publicKey: '',
+    isShowDialog: false,
+    isError: false,
+    dialogTitle: '',
+    dialogMsg: ''
+  }),
+  components: {
+    DialogConfirm
+  },
+  mounted () {
+    console.log('mounted Import')
+  },
+  methods: {
+    async goImport () {
+      if ((this.phoneNumber.length == 0) ||
+          (this.privateKey.length == 0) || 
+          (this.publicKey.length == 0) ||
+          (!this.isValidationPhoneNumber()) ) {
+        this.dialogTitle = "インポートエラー"
+        this.dialogMsg = "正しいデータを入力してください"
+        this.isShowDialog = true // ダイアログ表示
+        return
+      }
+
+      console.log(this.privateKey)
+      console.log(this.phoneNumber)
+      console.log(this.publicKey)
+      let model = new settingModel()
+      try {
+        let wallet = await model.createWalletWithPrivateKey(this.privateKey)
+        let consigAddress: string = wallet.accounts[0].address
+        Promise.all([
+          model.getAccountFromAddress(consigAddress),
+          model.getAccountFromPublicKey(this.publicKey)
+        ]).then(res => {
+          let consifAccount = res[0]
+          let multisigAccount = res[1]
+          console.log(consifAccount)
+          console.log(multisigAccount)
+          model.privateKey = this.privateKey
+          model.publicKey = this.publicKey
+          model.phoneNumber = this.phoneNumber
+          model.save()
+            .then(res => {
+              this.dialogTitle = "インポート"
+              this.dialogMsg = "インポートが完了しました"
+              this.isShowDialog = true // ダイアログ表示
+            }).catch(error => {
+              console.error("error", error)
+              this.dialogTitle = "インポートエラー"
+              this.dialogMsg = "ローカルストレージエラー<br><br>" + error
+              this.isShowDialog = true // ダイアログ表示   
+            })
+        }).catch(error => {
+          console.error("error", error)
+          this.dialogTitle = "インポートエラー"
+          this.dialogMsg = "正しいデータを入力してください<br><br>" + error
+          this.isShowDialog = true // ダイアログ表示
+        })
+      } catch (error) {
+        this.dialogTitle = "インポートエラー"
+        this.dialogMsg = "正しいデータを入力してください"
+        this.isShowDialog = true // ダイアログ表示
+        return
+      }
+    },
+    isValidationPhoneNumber(): boolean {
+      console.log(this.phoneNumber)
+      // 正しかったらtrue, 間違っていたらfalse
+         if (!this.phoneNumber.match(/^(0[5-9]0[0-9]{8}|0[1-9][1-9][0-9]{7})$/)) {
+          return false
+         } else {
+          return true
+         }
+    },
+    tapDialog() {
+      console.log("tapPositive")
+      this.isShowDialog = false  // ダイアログ
     }
   }
 })
-export default class Setting extends Vue {
-  private title = 'setting class'
-  privateKey: string = ''
-  phoneNumber: string = ''
-  publicKey: string = ''
-
-  
-  mounted () {
-    console.log('mounted Import')
-  }
-  async goImport () {
-    console.log(this.privateKey)
-    console.log(this.phoneNumber)
-    console.log(this.publicKey)
-    let model = new settingModel()
-    model.privateKey = this.privateKey
-    model.phoneNumber = this.phoneNumber
-    model.publicKey = this.publicKey
-    model.save()
-    let wallet = await model.createWalletWithPrivateKey(this.privateKey)
-    //this.hogehoge = wallet.accounts[0]
-  }
-}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.w-break {
+    word-break: break-all;
+}
 </style>

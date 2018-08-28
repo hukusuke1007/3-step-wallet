@@ -6,7 +6,8 @@ import {/* UnconfirmedTransactionListener, ConfirmedTransactionListener, */
     SimpleWallet, Password, EncryptedPrivateKey, TimeWindow, Message, PlainMessage, XEM,
     TransactionHttp, TransferTransaction, AccountOwnedMosaicsService, MosaicId, Transaction,
     PublicAccount, MultisigAggregateModificationTransaction, CosignatoryModification, CosignatoryModificationAction,
-    MultisigTransaction, TransactionTypes, MultisigSignatureTransaction, SignedTransaction, MosaicService} from 'nem-library'
+    MultisigTransaction, TransactionTypes, MultisigSignatureTransaction, SignedTransaction, MosaicService, AccountInfoWithMetaData} from 'nem-library'
+import { resolve } from 'dns';
 
 
     NEMLibrary.bootstrap(NetworkTypes.MAIN_NET)
@@ -59,7 +60,7 @@ export default class settingModel {
         }
     }
     // 秘密鍵からウォレット作成.
-    createWalletWithPrivateKey(privateKey: string) {
+    async createWalletWithPrivateKey(privateKey: string): Promise<any> {
         // Set a wallet name
         let walletName = "QuantumMechanicsImported"
 
@@ -67,13 +68,17 @@ export default class settingModel {
         let password = "Something"
 
         // Create a private key wallet
-        let wallet = nem.model.wallet.importPrivateKey(
-            walletName,
-            password,
-            privateKey,
-            nem.model.network.data.mainnet.id);
-        console.log(wallet)
-        return wallet
+        let result: any
+        try {
+            result = await nem.model.wallet.importPrivateKey(
+                walletName,
+                password,
+                privateKey,
+                nem.model.network.data.mainnet.id)
+        } catch (error) {
+            return Promise.reject(error)
+        }
+        return Promise.resolve(result)
     }
      
     // 送金（NEM）
@@ -272,6 +277,27 @@ export default class settingModel {
                 }
             )
         })
+    }
+
+    getAccountFromAddress(address: string) {
+        let promise = new Promise((resolve, reject) => {
+            accountHttp.getFromAddress(new Address(address)).subscribe(
+                accountInfoWithMetaData => { resolve(accountInfoWithMetaData) },
+                error => { reject(error) }
+            )
+        })
+        return promise
+    }
+
+    // アカウント取得(公開鍵).
+    getAccountFromPublicKey(publicKey: string) {
+        let promise = new Promise((resolve, reject) => {
+            accountHttp.getFromPublicKey(publicKey).subscribe(
+                accountInfoWithMetaData => { resolve(accountInfoWithMetaData) },
+                error => { reject(error) }
+            )
+        })
+        return promise
     }
     
     

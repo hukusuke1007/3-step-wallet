@@ -37,16 +37,10 @@
 <script lang="ts">
 import Vue from 'vue'
 import Component from 'vue-class-component'
-// Walletをimportする.
-import Wallet from './components/Wallet.vue'
 
 // コンポーネントの設定
 @Component({
-  name: 'app',
-  // Walletをcomponentとして定義する.
-  components: {
-    Wallet
-  }
+  name: 'app'
 })
 
 // クラス
