@@ -85,8 +85,13 @@ export default Vue.extend({
   components: {
     DialogConfirm
   },
-  mounted () {
+  async mounted () {
     console.log('mounted Import')
+    let model = new settingModel()
+    await model.load()
+    this.phoneNumber = model.phoneNumber
+    this.privateKey = model.privateKey
+    this.publicKey = model.publicKey
   },
   methods: {
     async goImport () {
