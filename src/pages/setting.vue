@@ -11,7 +11,7 @@
      <v-toolbar
       color="blue"
       dark
-    ><v-toolbar-title>設定画面</v-toolbar-title></v-toolbar>
+    ><v-toolbar-title>Setting</v-toolbar-title></v-toolbar>
     <v-container
           fluid
           style="min-height: 0;"
@@ -19,7 +19,7 @@
         <v-flex>
           <v-text-field
             box
-            label="利用される方の秘密鍵を入力してください"
+            label="Please enter the secret key of the person using it"
             v-model="privateKey"
             :counter="64"
             required></v-text-field>
@@ -27,7 +27,7 @@
         <v-flex>
           <v-text-field
             box
-            label="マルチシグ金庫の公開鍵を入力してください"
+            label="Please enter the public key of the multi-sig account"
             v-model="publicKey"
             :counter="64"
             required></v-text-field>
@@ -35,12 +35,12 @@
         <v-flex>
           <v-text-field
             box
-            label="金銭管理する方の電話番号を入力してください"
+            label="Please enter the phone number of the person who monitors money"
             v-model="phoneNumber"
             :counter="11"
             required></v-text-field>
-          <v-card-text>入力が終わりましたらボタンを押してください</v-card-text>
-          <v-btn color="select" class="white--text" large @click="goImport()">インポート</v-btn>
+          <v-card-text>Please press the button when input is completed</v-card-text>
+          <v-btn color="select" class="white--text" large @click="goImport()">Import</v-btn>
         </v-flex>
 
     <!-- ダイアログ -->
@@ -99,8 +99,8 @@ export default Vue.extend({
           (this.privateKey.length == 0) || 
           (this.publicKey.length == 0) ||
           (!this.isValidationPhoneNumber()) ) {
-        this.dialogTitle = "インポートエラー"
-        this.dialogMsg = "正しいデータを入力してください"
+        this.dialogTitle = "Import error"
+        this.dialogMsg = "Please enter the correct data"
         this.isShowDialog = true // ダイアログ表示
         return
       }
@@ -125,24 +125,24 @@ export default Vue.extend({
           model.phoneNumber = this.phoneNumber
           model.save()
             .then(res => {
-              this.dialogTitle = "インポート"
-              this.dialogMsg = "インポートが完了しました"
+              this.dialogTitle = "Import"
+              this.dialogMsg = "Import completed"
               this.isShowDialog = true // ダイアログ表示
             }).catch(error => {
               console.error("error", error)
-              this.dialogTitle = "インポートエラー"
-              this.dialogMsg = "ローカルストレージエラー<br><br>" + error
+              this.dialogTitle = "Import error"
+              this.dialogMsg = "Local storage error<br><br>" + error
               this.isShowDialog = true // ダイアログ表示   
             })
         }).catch(error => {
           console.error("error", error)
-          this.dialogTitle = "インポートエラー"
-          this.dialogMsg = "正しいデータを入力してください<br><br>" + error
+          this.dialogTitle = "Import error"
+          this.dialogMsg = "Please enter the correct data<br><br>" + error
           this.isShowDialog = true // ダイアログ表示
         })
       } catch (error) {
-        this.dialogTitle = "インポートエラー"
-        this.dialogMsg = "正しいデータを入力してください"
+        this.dialogTitle = "Import error"
+        this.dialogMsg = "Please enter the correct data"
         this.isShowDialog = true // ダイアログ表示
         return
       }
