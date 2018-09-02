@@ -30,7 +30,7 @@ workbox.clientsClaim();
 self.__precacheManifest = [
   {
     "url": "index.html",
-    "revision": "b0155edc13877030d2e780afb01fc989"
+    "revision": "d179c6d8e1594c8138e3113585aa8c6f"
   },
   {
     "url": "precache-manifest.04e20a486a529b39918a181fcab0a5e7.js",
@@ -45,8 +45,16 @@ self.__precacheManifest = [
     "revision": "1fc235b6f9146c2dba8085836862e68b"
   },
   {
+    "url": "precache-manifest.242e3ba8cf4bd53efb1cd7de694b3656.js",
+    "revision": "242e3ba8cf4bd53efb1cd7de694b3656"
+  },
+  {
     "url": "precache-manifest.341932d9b0c450ca53e18843b71153c9.js",
     "revision": "341932d9b0c450ca53e18843b71153c9"
+  },
+  {
+    "url": "precache-manifest.52c129459984f20d8386319ba3ee8d6c.js",
+    "revision": "52c129459984f20d8386319ba3ee8d6c"
   },
   {
     "url": "precache-manifest.52c2a7c98768e028fef8cfe2c31590fa.js",
@@ -106,7 +114,7 @@ self.__precacheManifest = [
   },
   {
     "url": "service-worker.js",
-    "revision": "e3e09b19758d309e326209f92f625599"
+    "revision": "5184e089ecb69d26121a7f4587263047"
   }
 ].concat(self.__precacheManifest || []);
 workbox.precaching.suppressWarnings();
