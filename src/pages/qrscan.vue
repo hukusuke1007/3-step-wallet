@@ -145,5 +145,13 @@ a {
   color: #35495E;
 }
 
+.qrcode-reader__inner-wrapper {
+    display: flex;
+    justify-content: center;
+}
+canvas.qrcode-reader__tracking-layer {
+    display: none;
+}
+
 
 </style>
